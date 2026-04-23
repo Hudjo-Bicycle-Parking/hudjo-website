@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hudjo — Secure the Ride. Honour the Journey.</title>
+  <meta name="description" content="Hudjo. Secure bike parking with trusted local hosts. Find parking near you or earn income as a Hudjo host." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --paper:      #F5F3EF;
+      --charcoal:   #1B1B1B;
+      --vermillion: #E63946;
+      --indigo:     #1F3A5F;
+      --rule:       rgba(27, 27, 27, 0.10);
+      --muted:      rgba(27, 27, 27, 0.45);
+      --nav-h:      72px;
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      background: var(--paper);
+      color: var(--charcoal);
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ─── Typography ─────────────────────────────────────────────── */
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', serif;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    p { line-height: 1.7; }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── Utility ────────────────────────────────────────────────── */
+    .eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--vermillion);
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    .btn {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      padding: 14px 28px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      text-decoration: none;
+    }
+
+    .btn-vermillion {
+      background: var(--vermillion);
+      color: #fff;
+      box-shadow: 0 2px 14px rgba(230,57,70,0.25);
+    }
+    .btn-vermillion:hover {
+      background: #c92d39;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 22px rgba(230,57,70,0.35);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--charcoal);
+      border: 1.5px solid rgba(27,27,27,0.25);
+    }
+    .btn-outline:hover {
+      border-color: var(--charcoal);
+      background: rgba(27,27,27,0.04);
+    }
+
+    .btn-outline-white {
+      background: transparent;
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.35);
+    }
+    .btn-outline-white:hover {
+      border-color: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--rule);
+    }
+
+    /* ─── Scroll animation ───────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.10s; }
+    .reveal-delay-2 { transition-delay: 0.20s; }
+    .reveal-delay-3 { transition-delay: 0.30s; }
+    .reveal-delay-4 { transition-delay: 0.40s; }
+
+    /* ─── Nav ────────────────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      z-index: 100;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+    .nav.scrolled {
+      background: rgba(245,243,239,0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 var(--rule);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: var(--nav-h);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--charcoal);
+      letter-spacing: 0.04em;
+    }
+    .nav-logo span { color: var(--vermillion); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--charcoal);
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+
+    .nav-cta { margin-left: 12px; }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--charcoal);
+      transition: all 0.3s ease;
+    }
+
+    .nav-mobile {
+      display: none;
+      position: fixed;
+      top: var(--nav-h);
+      left: 0; right: 0;
+      background: rgba(245,243,239,0.98);
+      backdrop-filter: blur(12px);
+      padding: 24px 32px 32px;
+      flex-direction: column;
+      gap: 20px;
+      border-top: 1px solid var(--rule);
+      z-index: 99;
+    }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--charcoal);
+      opacity: 0.75;
+    }
+    .nav-mobile a:hover { opacity: 1; }
+    .nav-mobile .btn { width: 100%; text-align: center; margin-top: 8px; }
+
+    @media (max-width: 820px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+    }
+
+    /* ─── Hero ───────────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: var(--nav-h);
+    }
+
+    /* Subtle geometric background pattern */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--rule) 1px, transparent 1px),
+        linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+      background-size: 64px 64px;
+      opacity: 0.6;
+    }
+
+    /* Gradient overlay bottom */
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 40%;
+      background: linear-gradient(to bottom, transparent, var(--paper));
+      pointer-events: none;
+    }
+
+    /* Accent circle */
+    .hero-accent {
+      position: absolute;
+      top: 15%;
+      right: -6%;
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(31,58,95,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      padding: 80px 0;
+    }
+
+    .hero-pretitle {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+    .hero-pretitle-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--vermillion);
+      flex-shrink: 0;
+    }
+    .hero-pretitle-text {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .hero h1 {
+      font-size: clamp(44px, 6vw, 80px);
+      font-weight: 700;
+      line-height: 1.05;
+      color: var(--charcoal);
+      margin-bottom: 28px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--indigo);
+    }
+
+    .hero-sub {
+      font-size: clamp(16px, 2vw, 19px);
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 520px;
+      margin-bottom: 48px;
+      line-height: 1.65;
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.35;
+      animation: scrollBounce 2.4s ease-in-out infinite;
+    }
+    .hero-scroll span {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .hero-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: var(--charcoal);
+    }
+
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ─── Section shared ─────────────────────────────────────────── */
+    .section {
+      padding: 120px 0;
+    }
+    .section-sm { padding: 80px 0; }
+
+    .section-header {
+      margin-bottom: 72px;
+    }
+    .section-header.centered { text-align: center; }
+
+    .section-header h2 {
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 600;
+      color: var(--charcoal);
+      margin-bottom: 18px;
+    }
+
+    .section-header p {
+      font-size: 17px;
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 560px;
+      line-height: 1.7;
+    }
+    .section-header.centered p { margin: 0 auto; }
+
+    /* ─── How It Works ───────────────────────────────────────────── */
+    #how { background: var(--paper); }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+
+    .how-card {
+      background: var(--paper);
+      padding: 56px 40px;
+      position: relative;
+    }
+
+    .how-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 32px;
+      display: block;
+    }
+
+    .how-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 28px;
+      color: var(--indigo);
+    }
+
+    .how-card h3 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      color: var(--charcoal);
+    }
+
+    .how-card p {
+      font-size: 15px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 720px) {
+      .how-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── Why Hudjo ──────────────────────────────────────────────── */
+    #why { background: var(--paper); }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px 64px;
+    }
+
+    .why-card {}
+
+    .why-bar {
+      width: 32px;
+      height: 2px;
+      background: var(--vermillion);
+      margin-bottom: 28px;
+    }
+
+    .why-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      color: var(--charcoal);
+      line-height: 1.25;
+    }
+
+    .why-card p {
+      font-size: 15px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.75;
+    }
+
+    @media (max-width: 900px) {
+      .why-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+    }
+    @media (max-width: 600px) {
+      .why-grid { grid-template-columns: 1fr; gap: 40px; }
+    }
+
+    /* ─── Anywhere Banner ────────────────────────────────────────── */
+    .anywhere-banner {
+      padding: 80px 0;
+      background: var(--charcoal);
+      overflow: hidden;
+      position: relative;
+    }
+    .anywhere-banner::before {
+      content: '';
+      position: absolute;
+      top: -60%;
+      right: -10%;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(230,57,70,0.08) 0%, transparent 70%);
+    }
+
+    .anywhere-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .anywhere-left h2 {
+      font-size: clamp(30px, 4vw, 46px);
+      color: #fff;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .anywhere-left p {
+      font-size: 16px;
+      color: rgba(255,255,255,0.55);
+      font-weight: 300;
+      line-height: 1.75;
+    }
+
+    .anywhere-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .stat-item {}
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 40px;
+      font-weight: 600;
+      color: var(--vermillion);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-label {
+      font-size: 13px;
+      color: rgba(255,255,255,0.45);
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 720px) {
+      .anywhere-inner { grid-template-columns: 1fr; gap: 48px; }
+      .anywhere-stats { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ─── For Hosts ──────────────────────────────────────────────── */
+    #hosts {
+      background: var(--indigo);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hosts::before {
+      content: '';
+      position: absolute;
+      bottom: -20%;
+      left: -10%;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+    }
+
+    #hosts .eyebrow { color: rgba(230,57,70,0.9); }
+
+    #hosts .section-header h2 {
+      color: #fff;
+      max-width: 500px;
+    }
+
+    #hosts .section-header p {
+      color: rgba(255,255,255,0.55);
+    }
+
+    .hosts-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .hosts-benefits {
+      padding-top: 8px;
+    }
+
+    .host-benefit {
+      display: flex;
+      gap: 20px;
+      padding: 24px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .host-benefit:first-child { padding-top: 0; }
+
+    .host-benefit-icon {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+    .host-benefit-icon svg {
+      width: 16px;
+      height: 16px;
+      color: rgba(230,57,70,0.85);
+    }
+
+    .host-benefit-text h4 {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: 6px;
+      letter-spacing: 0;
+    }
+    .host-benefit-text p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.45);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .hosts-signup {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .hosts-signup .btn { width: fit-content; }
+    .hosts-signup-note {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      font-weight: 300;
+    }
+
+    /* Calculator embedded */
+    .calc-wrapper {
+      background: var(--paper);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.25);
+    }
+
+    .calc-inner {
+      padding: 48px 40px 56px;
+    }
+
+    .calc-header {
+      margin-bottom: 40px;
+    }
+
+    .calc-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--indigo);
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .calc-header p {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    .calc-divider {
+      height: 1px;
+      background: var(--rule);
+      margin: 32px 0;
+    }
+
+    .calc-sliders {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .calc-slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .calc-slider-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .calc-slider-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .calc-slider-value {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--charcoal);
+      letter-spacing: -0.02em;
+      font-family: 'Playfair Display', serif;
+    }
+
+    input[type="range"].calc-range {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 2px;
+      background: var(--rule);
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+    input[type="range"].calc-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--charcoal);
+      cursor: pointer;
+      transition: transform 0.15s, background 0.15s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+    }
+    input[type="range"].calc-range::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      background: var(--vermillion);
+    }
+    input[type="range"].calc-range::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--charcoal);
+      border: none;
+      cursor: pointer;
+      transition: transform 0.15s, background 0.15s;
+    }
+
+    .calc-range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: -2px;
+    }
+
+    .calc-results {
+      margin-top: 40px;
+    }
+
+    .calc-result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .calc-result-row:first-child { border-top: 1px solid var(--rule); }
+
+    .calc-result-label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 400;
+      max-width: 55%;
+      line-height: 1.4;
+    }
+
+    .calc-result-amount {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--charcoal);
+      letter-spacing: -0.02em;
+      font-family: 'Playfair Display', serif;
+      white-space: nowrap;
+    }
+
+    .calc-result-row.highlight .calc-result-label { color: var(--charcoal); }
+    .calc-result-row.highlight .calc-result-amount {
+      font-size: 26px;
+      color: var(--indigo);
+    }
+    .calc-result-row.customer .calc-result-amount {
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .calc-note {
+      margin-top: 24px;
+      padding: 16px 20px;
+      background: rgba(31,58,95,0.05);
+      border-left: 2px solid var(--indigo);
+      border-radius: 0 3px 3px 0;
+    }
+    .calc-note p {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .calc-note strong { color: var(--charcoal); font-weight: 500; }
+
+    .calc-cta {
+      margin-top: 32px;
+      text-align: center;
+    }
+    .calc-cta .btn { width: 100%; }
+
+    @media (max-width: 960px) {
+      .hosts-layout { grid-template-columns: 1fr; gap: 56px; }
+    }
+
+    @media (max-width: 560px) {
+      .calc-inner { padding: 32px 24px 40px; }
+    }
+
+    /* ─── Omotenashi ─────────────────────────────────────────────── */
+    .omotenashi {
+      padding: 100px 0;
+      background: var(--paper);
+      position: relative;
+    }
+
+    .omotenashi-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .omotenashi-visual {
+      position: relative;
+      height: 400px;
+    }
+
+    /* CSS art — stylised Japanese circular seal / hanko motif */
+    .omotenashi-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(31,58,95,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .omotenashi-circle::before {
+      content: '';
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      border: 1px solid rgba(31,58,95,0.08);
+    }
+    .omotenashi-circle::after {
+      content: '';
+      position: absolute;
+      inset: 28px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, rgba(31,58,95,0.06), rgba(31,58,95,0.02));
+    }
+
+    .omotenashi-seal-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--indigo);
+      letter-spacing: 0.06em;
+      position: relative;
+      z-index: 1;
+      opacity: 0.7;
+    }
+
+    .omotenashi-text h2 {
+      font-size: clamp(28px, 3.5vw, 42px);
+      margin-bottom: 20px;
+    }
+    .omotenashi-text .eyebrow { color: var(--muted); }
+    .omotenashi-text p {
+      font-size: 16px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+    .omotenashi-text p:last-of-type { margin-bottom: 0; }
+
+    @media (max-width: 820px) {
+      .omotenashi-inner { grid-template-columns: 1fr; gap: 48px; }
+      .omotenashi-visual { height: 220px; }
+      .omotenashi-circle { width: 200px; height: 200px; }
+      .omotenashi-seal-text { font-size: 24px; }
+    }
+
+    /* ─── Mission ────────────────────────────────────────────────── */
+    #mission {
+      padding: 140px 0;
+      background: var(--charcoal);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #mission::before {
+      content: '"';
+      position: absolute;
+      top: -0.15em;
+      left: -0.05em;
+      font-family: 'Playfair Display', serif;
+      font-size: 40vw;
+      color: rgba(255,255,255,0.025);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .mission-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 880px;
+    }
+
+    .mission-inner .eyebrow { color: var(--vermillion); }
+
+    .mission-headline {
+      font-size: clamp(32px, 5vw, 62px);
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 48px;
+    }
+
+    .mission-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px 64px;
+    }
+
+    .mission-block h4 {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 14px;
+    }
+
+    .mission-block p {
+      font-size: 16px;
+      color: rgba(255,255,255,0.6);
+      font-weight: 300;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 680px) {
+      .mission-body { grid-template-columns: 1fr; gap: 36px; }
+    }
+
+    /* ─── Founder Story ──────────────────────────────────────────── */
+    #founder { background: var(--paper); }
+
+    .founder-inner {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .founder-aside {
+      position: sticky;
+      top: calc(var(--nav-h) + 40px);
+    }
+
+    .founder-avatar {
+      width: 100%;
+      aspect-ratio: 1;
+      max-width: 260px;
+      border-radius: 3px;
+      background: linear-gradient(135deg, rgba(31,58,95,0.08) 0%, rgba(31,58,95,0.03) 100%);
+      border: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .founder-avatar::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 20px,
+          rgba(31,58,95,0.025) 20px,
+          rgba(31,58,95,0.025) 21px
+        );
+    }
+
+    .founder-avatar-initials {
+      font-family: 'Playfair Display', serif;
+      font-size: 48px;
+      font-weight: 400;
+      color: var(--indigo);
+      opacity: 0.3;
+      position: relative;
+      z-index: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .founder-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--charcoal);
+      margin-bottom: 6px;
+    }
+
+    .founder-title {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .founder-story h2 {
+      font-size: clamp(28px, 3.5vw, 42px);
+      margin-bottom: 32px;
+    }
+
+    .founder-story p {
+      font-size: 17px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.85;
+      margin-bottom: 24px;
+    }
+
+    .founder-story p:last-child { margin-bottom: 0; }
+
+    .founder-story blockquote {
+      margin: 36px 0;
+      padding: 28px 32px;
+      border-left: 3px solid var(--vermillion);
+      background: rgba(230,57,70,0.03);
+    }
+
+    .founder-story blockquote p {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--charcoal);
+      font-weight: 400;
+      line-height: 1.55;
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 820px) {
+      .founder-inner { grid-template-columns: 1fr; gap: 48px; }
+      .founder-aside { position: static; display: flex; align-items: center; gap: 24px; }
+      .founder-avatar { max-width: 80px; margin-bottom: 0; }
+      .founder-avatar-initials { font-size: 28px; }
+    }
+
+    /* ─── Testimonials ───────────────────────────────────────────── */
+    #testimonials { background: var(--paper); }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+
+    .testimonial-card {
+      background: var(--paper);
+      padding: 48px 36px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .testimonial-stars {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 24px;
+    }
+    .testimonial-star {
+      width: 12px;
+      height: 12px;
+      fill: var(--vermillion);
+    }
+
+    .testimonial-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-style: italic;
+      color: var(--charcoal);
+      line-height: 1.65;
+      flex: 1;
+      margin-bottom: 32px;
+    }
+
+    .testimonial-author {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-top: 24px;
+      border-top: 1px solid var(--rule);
+    }
+    .testimonial-author-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--charcoal);
+    }
+    .testimonial-author-role {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    @media (max-width: 800px) {
+      .testimonials-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── CTA Band ────────────────────────────────────────────────── */
+    .cta-band {
+      padding: 100px 0;
+      background: var(--paper);
+      text-align: center;
+      border-top: 1px solid var(--rule);
+    }
+
+    .cta-band .eyebrow { justify-content: center; display: flex; }
+
+    .cta-band h2 {
+      font-size: clamp(30px, 4vw, 52px);
+      margin-bottom: 20px;
+    }
+
+    .cta-band p {
+      font-size: 17px;
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 480px;
+      margin: 0 auto 48px;
+      line-height: 1.7;
+    }
+
+    .cta-band-btns {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* ─── Footer ─────────────────────────────────────────────────── */
+    footer {
+      background: var(--charcoal);
+      padding: 72px 0 40px;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 56px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .footer-brand {}
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.04em;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .footer-logo span { color: var(--vermillion); }
+
+    .footer-tagline {
+      font-size: 14px;
+      color: rgba(255,255,255,0.35);
+      font-weight: 300;
+      line-height: 1.7;
+      max-width: 240px;
+    }
+
+    .footer-col h5 {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 20px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-col ul a {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      font-weight: 300;
+      transition: color 0.2s;
+    }
+    .footer-col ul a:hover { color: rgba(255,255,255,0.9); }
+
+    .footer-social {
+      display: flex;
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .social-link {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      color: rgba(255,255,255,0.45);
+    }
+    .social-link:hover {
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+    }
+    .social-link svg { width: 15px; height: 15px; fill: currentColor; }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 32px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-bottom-left {
+      font-size: 13px;
+      color: rgba(255,255,255,0.2);
+      font-weight: 300;
+    }
+
+    .footer-global {
+      font-family: 'Playfair Display', serif;
+      font-size: 14px;
+      font-style: italic;
+      color: rgba(255,255,255,0.3);
+    }
+
+    @media (max-width: 900px) {
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 36px; }
+    }
+    @media (max-width: 560px) {
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ─── Section padding ─────────────────────────────────────────── */
+    @media (max-width: 720px) {
+      .section { padding: 80px 0; }
+      .container { padding: 0 20px; }
+      .section-header { margin-bottom: 48px; }
+    }
+
+    /* ─── Micro-animations ────────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .hero-scroll { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── NAV ──────────────────────────────────────────────────────── -->
+  <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo">HUDJ<span>O</span></a>
+
+        <ul class="nav-links" role="list">
+          <li><a href="#how">Park</a></li>
+          <li><a href="#hosts">Host</a></li>
+          <li><a href="#founder">About</a></li>
+          <li><a href="#footer">Contact</a></li>
+        </ul>
+
+        <a href="#hosts" class="btn btn-vermillion nav-cta" style="font-size:13px; padding:11px 22px;">Become a Host</a>
+
+        <button class="nav-hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="nav-mobile" id="navMobile" role="menu">
+      <a href="#how" role="menuitem">Park</a>
+      <a href="#hosts" role="menuitem">Host</a>
+      <a href="#founder" role="menuitem">About</a>
+      <a href="#footer" role="menuitem">Contact</a>
+      <a href="#hosts" class="btn btn-vermillion" role="menuitem">Become a Host</a>
+    </div>
+  </nav>
+
+  <!-- ─── HERO ─────────────────────────────────────────────────────── -->
+  <section class="hero" id="home" aria-labelledby="hero-headline">
+    <div class="hero-accent" aria-hidden="true"></div>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-pretitle reveal">
+          <span class="hero-pretitle-dot" aria-hidden="true"></span>
+          <span class="hero-pretitle-text">Secure parking. Local income. Connected neighbourhoods.</span>
+        </div>
+
+        <h1 id="hero-headline" class="reveal reveal-delay-1">
+          Secure the Ride.<br>
+          <em>Honour the Journey.</em>
+        </h1>
+
+        <p class="hero-sub reveal reveal-delay-2">
+          Open the app. Find secure parking near you. Check in with your host and leave your bike with the peace of mind that it will be there when you return.
+        </p>
+
+        <div class="hero-ctas reveal reveal-delay-3">
+          <a href="#how" class="btn btn-vermillion">Find Parking</a>
+          <a href="#hosts" class="btn btn-outline">Become a Host</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="hero-scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ─── HOW IT WORKS ─────────────────────────────────────────────── -->
+  <section class="section" id="how" aria-labelledby="how-heading">
+    <div class="container">
+      <div class="section-header centered reveal">
+        <span class="eyebrow">How it works</span>
+        <h2 id="how-heading">Three steps. Zero stress.</h2>
+        <p>No booking required. No guessing. Just secure, convenient parking wherever you need it.</p>
+      </div>
+
+      <div class="how-grid" role="list">
+
+        <div class="how-card reveal" role="listitem">
+          <span class="how-number">01 — Park</span>
+          <svg class="how-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <circle cx="16" cy="36" r="6" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="36" cy="36" r="6" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M16 36L22 18h10l4 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10 24h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="36" cy="14" r="4" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M32 28l4-14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <h3>Find a host near you</h3>
+          <p>Open the Hudjo app and see verified hosts on your route. Every location is checked by a Hudjo surveyor before going live.</p>
+        </div>
+
+        <div class="how-card reveal reveal-delay-1" role="listitem">
+          <span class="how-number">02 — Pay</span>
+          <svg class="how-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="8" y="14" width="32" height="22" rx="3" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M8 22h32" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="14" y="28" width="8" height="3" rx="1" fill="currentColor" opacity="0.4"/>
+          </svg>
+          <h3>Pay by the minute</h3>
+          <p>Hosts set their own rate — from 1p to 5p per minute. Pay only for the time you use. Transactions handled automatically in the app.</p>
+        </div>
+
+        <div class="how-card reveal reveal-delay-2" role="listitem">
+          <span class="how-number">03 — Go</span>
+          <svg class="how-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <circle cx="20" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M14 40V28l-4-6h20l-4 6v12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M32 24l6-6M38 18l-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M34 24l4 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <h3>Leave with confidence</h3>
+          <p>Check in, hand over your bike, and go. Every session is logged and tracked. Your bike is in trusted hands — and it will be there when you return.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SEE HOW IT WORKS ─────────────────────────────────────────── -->
+  <section class="section" id="see-how" style="background: #FAFAF7;" aria-labelledby="see-how-heading">
+    <div class="container">
+      <div class="section-header reveal" style="text-align: center; margin-bottom: 2.5rem;">
+        <h2 id="see-how-heading" style="font-family: 'Playfair Display', serif; font-size: clamp(1.75rem, 4vw, 2.5rem); color: #1F3A5F; font-weight: 700; margin: 0;">See Hudjo in action</h2>
+      </div>
+      <div class="reveal" style="max-width: 800px; margin: 0 auto;">
+        <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 8px 32px rgba(31,58,95,0.12);">
+          <iframe
+            src="https://www.youtube.com/embed/xjFkxF4zRv8?si=kyLxh7PInqLzq8zU"
+            title="See Hudjo in action"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── WHY HUDJO ─────────────────────────────────────────────────── -->
+  <section class="section" id="why" style="background: rgba(31,58,95,0.03);" aria-labelledby="why-heading">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="eyebrow">Why Hudjo</span>
+        <h2 id="why-heading">The last hurdle in cycling.<br>Solved.</h2>
+      </div>
+
+      <div class="why-grid">
+
+        <div class="why-card reveal">
+          <div class="why-bar" aria-hidden="true"></div>
+          <h3>It's not the hills. It's not the weather.</h3>
+          <p>The reason people don't cycle more is not knowing where to leave their bike. Hudjo solves that — secure parking with a trusted local host, exactly where you need it.</p>
+        </div>
+
+        <div class="why-card reveal reveal-delay-1">
+          <div class="why-bar" aria-hidden="true"></div>
+          <h3>80% goes directly to the local business.</h3>
+          <p>Unlike most apps, we give 80% of every parking fee to the local business hosting your bike. To the café on the corner. The barber on the high street. The retailer with a spare space.</p>
+        </div>
+
+        <div class="why-card reveal reveal-delay-2">
+          <div class="why-bar" aria-hidden="true"></div>
+          <h3>Safety, from start to finish.</h3>
+          <p>Your bike is only ever in the hands of a verified Hudjo host. Every check-in is logged. Every session is tracked. And when you return, your bike is exactly where you left it.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ANYWHERE BANNER ───────────────────────────────────────────── -->
+  <div class="anywhere-banner" aria-label="Hudjo by the numbers">
+    <div class="container">
+      <div class="anywhere-inner">
+        <div class="anywhere-left reveal">
+          <span class="eyebrow" style="color: rgba(230,57,70,0.7);">Anywhere, any time</span>
+          <h2>Running an errand. Meeting friends. Daily commute.</h2>
+          <p>Wherever you're headed, count on Hudjo for convenient, secure bike parking — no booking required.</p>
+        </div>
+        <div class="anywhere-stats reveal reveal-delay-1">
+          <div class="stat-item">
+            <div class="stat-number">80%</div>
+            <div class="stat-label">of every fee goes to your local host</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">£2,600</div>
+            <div class="stat-label">average annual earnings per host</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">&lt;4 min</div>
+            <div class="stat-label">to sign up as a host</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">1–5p</div>
+            <div class="stat-label">per minute, you set the rate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── OMOTENASHI ─────────────────────────────────────────────────── -->
+  <section class="omotenashi" aria-labelledby="omotenashi-heading">
+    <div class="container">
+      <div class="omotenashi-inner">
+        <div class="omotenashi-visual reveal" aria-hidden="true">
+          <div class="omotenashi-circle">
+            <span class="omotenashi-seal-text">おもてなし</span>
+          </div>
+        </div>
+        <div class="omotenashi-text reveal reveal-delay-1">
+          <span class="eyebrow">The Hudjo way</span>
+          <h2 id="omotenashi-heading">Omotenashi.<br>Selfless hospitality.</h2>
+          <p>In Japan, there's a concept called Omotenashi — anticipating what someone needs before they ask. It's what the best cafés, shops and local businesses do every single day.</p>
+          <p>When you host with Hudjo, you bring that same care to the cyclist outside. You take their bike, keep it safe, hand it back when they return. And in doing so, you earn income, drive footfall, and become part of the infrastructure that makes your neighbourhood thrive.</p>
+          <p style="font-family: 'Playfair Display', serif; font-style: italic; color: var(--indigo); font-size: 17px; margin-top: 28px;">"You already welcome people. Now welcome their bikes too."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOR HOSTS ─────────────────────────────────────────────────── -->
+  <section class="section" id="hosts" aria-labelledby="hosts-heading">
+    <div class="container">
+      <div class="hosts-layout">
+
+        <div>
+          <div class="section-header reveal">
+            <span class="eyebrow">Host with Hudjo</span>
+            <h2 id="hosts-heading">Make money on your real estate.<br><em style="color: rgba(255,255,255,0.7); font-size: 0.85em;">Belong to a better neighbourhood.</em></h2>
+            <p>You already welcome people through your door. Now welcome their bikes too. Host when it suits you. Set your own hours. Set your own rate.</p>
+          </div>
+
+          <div class="hosts-benefits reveal reveal-delay-1">
+
+            <div class="host-benefit">
+              <div class="host-benefit-icon" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="host-benefit-text">
+                <h4>80% directly to you</h4>
+                <p>We take 20% to cover payments, support, and platform costs. Everything else is yours, deposited automatically every month.</p>
+              </div>
+            </div>
+
+            <div class="host-benefit">
+              <div class="host-benefit-icon" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M8 5v4l2.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="host-benefit-text">
+                <h4>Host on your terms</h4>
+                <p>Set your own hours. Set your own rate (1–5p per minute). Take as many bikes as you have space for. You're in charge.</p>
+              </div>
+            </div>
+
+            <div class="host-benefit">
+              <div class="host-benefit-icon" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none">
+                  <path d="M2 13l4-4 3 3 5-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="host-benefit-text">
+                <h4>Drive footfall</h4>
+                <p>A cyclist collecting their bike is already in your door. That's warm footfall you didn't have to earn twice.</p>
+              </div>
+            </div>
+
+            <div class="host-benefit">
+              <div class="host-benefit-icon" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2C5.24 2 3 4.24 3 7c0 3.75 5 7 5 7s5-3.25 5-7c0-2.76-2.24-5-5-5z" stroke="currentColor" stroke-width="1.5"/>
+                  <circle cx="8" cy="7" r="1.5" fill="currentColor" opacity="0.5"/>
+                </svg>
+              </div>
+              <div class="host-benefit-text">
+                <h4>Verified from day one</h4>
+                <p>Every host is visited by a Hudjo surveyor before going live. Safety and trust are built in, not bolted on.</p>
+              </div>
+            </div>
+
+            <div class="host-benefit">
+              <div class="host-benefit-icon" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2l1.5 3 3.5.5-2.5 2.5.5 3.5L8 10l-3 1.5.5-3.5L3 5.5l3.5-.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="host-benefit-text">
+                <h4>You're always in control</h4>
+                <p>You have the right to refuse any bike you consider unsafe. No explanation needed.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="hosts-signup reveal reveal-delay-2">
+            <a href="#" class="btn btn-vermillion" style="background: var(--vermillion);">Become a Hudjo Host &rarr;</a>
+            <span class="hosts-signup-note">Signing up takes less than 4 minutes.</span>
+          </div>
+        </div>
+
+        <!-- Embedded Earnings Calculator -->
+        <div class="calc-wrapper reveal reveal-delay-1" role="complementary" aria-label="Host earnings calculator">
+          <div class="calc-inner">
+            <div class="calc-header">
+              <span class="eyebrow" style="color: var(--vermillion); margin-bottom: 10px;">For Hosts</span>
+              <h3>See what you could earn with Hudjo</h3>
+              <p>Adjust the sliders to model your space and charging habits.</p>
+            </div>
+
+            <div class="calc-divider"></div>
+
+            <div class="calc-sliders">
+
+              <div class="calc-slider-group">
+                <div class="calc-slider-label-row">
+                  <span class="calc-slider-label">Your Rate</span>
+                  <span class="calc-slider-value" id="c-rate-display">3p / min</span>
+                </div>
+                <input type="range" class="calc-range" id="c-rate" min="1" max="5" step="1" value="3" aria-label="Your rate in pence per minute" />
+                <div class="calc-range-labels" aria-hidden="true">
+                  <span>1p / min</span>
+                  <span>5p / min</span>
+                </div>
+              </div>
+
+              <div class="calc-slider-group">
+                <div class="calc-slider-label-row">
+                  <span class="calc-slider-label">Bike Spaces</span>
+                  <span class="calc-slider-value" id="c-spaces-display">5</span>
+                </div>
+                <input type="range" class="calc-range" id="c-spaces" min="1" max="20" step="1" value="5" aria-label="Number of bike spaces" />
+                <div class="calc-range-labels" aria-hidden="true">
+                  <span>1 space</span>
+                  <span>20 spaces</span>
+                </div>
+              </div>
+
+              <div class="calc-slider-group">
+                <div class="calc-slider-label-row">
+                  <span class="calc-slider-label">Avg. Hours Used / Day</span>
+                  <span class="calc-slider-value" id="c-hours-display">4 hrs</span>
+                </div>
+                <input type="range" class="calc-range" id="c-hours" min="1" max="8" step="1" value="4" aria-label="Average hours used per day" />
+                <div class="calc-range-labels" aria-hidden="true">
+                  <span>1 hr</span>
+                  <span>8 hrs</span>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="calc-results" role="region" aria-live="polite" aria-label="Earnings results">
+              <div class="calc-result-row">
+                <span class="calc-result-label">You earn per session<br><small style="font-size:11px; opacity:0.6;">(1 hour example)</small></span>
+                <span class="calc-result-amount" id="c-per-session">—</span>
+              </div>
+              <div class="calc-result-row highlight">
+                <span class="calc-result-label">Your monthly earnings</span>
+                <span class="calc-result-amount" id="c-monthly">—</span>
+              </div>
+              <div class="calc-result-row highlight">
+                <span class="calc-result-label">Your annual earnings</span>
+                <span class="calc-result-amount" id="c-annual">—</span>
+              </div>
+              <div class="calc-result-row customer">
+                <span class="calc-result-label">What your customers pay<br><small style="font-size:11px; opacity:0.6;">(per hour + 50p fee)</small></span>
+                <span class="calc-result-amount" id="c-customer">—</span>
+              </div>
+            </div>
+
+            <div class="calc-note">
+              <p>Based on your rate, <strong>capped at £5/day for users</strong>. <strong>80% of every penny goes to you</strong> — we take 20% to cover payments, maintenance support, and platform costs.</p>
+            </div>
+
+            <div class="calc-cta">
+              <a href="#" class="btn btn-vermillion">Become a Hudjo Host &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── MISSION ───────────────────────────────────────────────────── -->
+  <section id="mission" aria-labelledby="mission-heading">
+    <div class="container">
+      <div class="mission-inner">
+        <span class="eyebrow reveal">Our mission</span>
+        <h2 id="mission-heading" class="mission-headline reveal reveal-delay-1">
+          Connecting our world,<br>one neighbourhood<br>at a time.
+        </h2>
+        <div class="mission-body">
+          <div class="mission-block reveal reveal-delay-2">
+            <h4>Why we exist</h4>
+            <p>Cycling is the most human way to move through a city. But without somewhere safe to leave your bike, people don't ride. We fix that — by turning the spaces that already exist into the infrastructure that cycling needs.</p>
+          </div>
+          <div class="mission-block reveal reveal-delay-3">
+            <h4>What we're building</h4>
+            <p>Every Hudjo location is a local business that believes in their neighbourhood. Every cyclist who parks is a customer who walks through someone's door. That's not just parking. That's community.</p>
+          </div>
+          <div class="mission-block reveal reveal-delay-2">
+            <h4>The heartbeat of the neighbourhood</h4>
+            <p>A neighbourhood with Hudjo is more connected, more accessible, more sustainable. More people cycling. More footfall for local businesses. More eyes on the street. Less traffic, less noise, less carbon.</p>
+          </div>
+          <div class="mission-block reveal reveal-delay-3">
+            <h4>Infrastructure, quietly</h4>
+            <p>Hudjo is infrastructure — invisible when it works perfectly, essential when it's gone. The neighbourhood that plays together stays together.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOUNDER ───────────────────────────────────────────────────── -->
+  <section class="section" id="founder" aria-labelledby="founder-heading">
+    <div class="container">
+      <div class="founder-inner">
+
+        <div class="founder-aside reveal">
+          <div class="founder-avatar" aria-hidden="true">
+            <span class="founder-avatar-initials">DG</span>
+          </div>
+          <div>
+            <p class="founder-name">David Gamble</p>
+            <p class="founder-title">Founder & CEO, Hudjo</p>
+          </div>
+        </div>
+
+        <div class="founder-story">
+          <span class="eyebrow reveal">The founder story</span>
+          <h2 id="founder-heading" class="reveal reveal-delay-1">It started with a bike that wasn't there.</h2>
+
+          <p class="reveal reveal-delay-2">David Gamble was eight years old when his bike was stolen. He'd leaned it against a railing, gone inside, and come back to nothing. That small, sharp loss — the confusion, the injustice of it — never quite left him.</p>
+
+          <blockquote class="reveal reveal-delay-2">
+            <p>"I remember thinking: why isn't there somewhere safe to leave it? Why does no one care about this?"</p>
+          </blockquote>
+
+          <p class="reveal reveal-delay-3">Thirty years later, David still cycles everywhere. And he still sees the same problem at every destination — bikes locked to signposts, chained to railings, left and hoped for. The infrastructure for cycling has improved enormously. The parking hasn't moved at all.</p>
+
+          <p class="reveal reveal-delay-3">Hudjo was built to close that gap. Not with lockers or technology for its own sake, but with something simpler and more human: trust. A local business that cares. A host who takes your bike and hands it back. The peace of mind that turns a maybe-I'll-cycle into a yes-I-will.</p>
+
+          <p class="reveal reveal-delay-4">The name comes from Hojo — Japanese for security and prosperity. The philosophy comes from Omotenashi. And the mission is the same one that's been in David's head since he was eight years old, standing on an empty pavement, looking for a bike that wasn't there.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TESTIMONIALS ──────────────────────────────────────────────── -->
+  <section class="section" id="testimonials" style="background: rgba(31,58,95,0.03);" aria-labelledby="testimonials-heading">
+    <div class="container">
+      <div class="section-header centered reveal">
+        <span class="eyebrow">What people say</span>
+        <h2 id="testimonials-heading">Cyclists. Hosts. Neighbours.</h2>
+        <p>Real people, real neighbourhoods. This is what Hudjo feels like.</p>
+      </div>
+
+      <div class="testimonials-grid" role="list">
+
+        <article class="testimonial-card reveal" role="listitem">
+          <div class="testimonial-stars" aria-label="5 stars">
+            <svg class="testimonial-star" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.5 4.5H12l-3.75 2.7 1.44 4.3L6 9l-3.69 2.5 1.44-4.3L0 4.5h4.5z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.5 4.5H12l-3.75 2.7 1.44 4.3L6 9l-3.69 2.5 1.44-4.3L0 4.5h4.5z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.5 4.5H12l-3.75 2.7 1.44 4.3L6 9l-3.69 2.5 1.44-4.3L0 4.5h4.5z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.5 4.5H12l-3.75 2.7 1.44 4.3L6 9l-3.69 2.5 1.44-4.3L0 4.5h4.5z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.5 4.5H12l-3.75 2.7 1.44 4.3L6 9l-3.69 2.5 1.44-4.3L0 4.5h4.5z"/></svg>
+          </div>
+          <p class="testimonial-quote">"I cycle to work every day and always ended up just locking to whatever I could find. With Hudjo I know exactly where I'm going and my bike will be there when I leave. It genuinely changed how I feel about cycling into the city."</p>
+          <div class="testimonial-author">
+            <span class="testimonial-author-name">Sarah M.</span>
+            <span class="testimonial-author-role">Daily commuter, Edinburgh</span>
+          </div>
+        </article>
+
+        <article class="testimonial-card reveal reveal-delay-1" role="listitem">
+          <div class="testimonial-stars" aria-label="5 stars">
+            <svg class="testimonial-star" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.5 4.5H12l-3.75 2.7 1.44 4.3L6 9l-3.69 2.5 1.44-4.3L0 4.5h4.5z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.5 4.5H12l-3.75 2.7 1.44 4.3L6 9l-3.69 2.5 1.44-4.3L0 4.5h4.5z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.5 4.5H12l-3.75 2.7 1.44 4.3L6 9l-3.69 2.5 1.44-4.3L0 4.5h4.5z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.5 4.5H12l-3.75 2.7 1.44 4.3L6 9l-3.69 2.5 1.44-4.3L0 4.5h4.5z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.5 4.5H12l-3.75 2.7 1.44 4.3L6 9l-3.69 2.5 1.44-4.3L0 4.5h4.5z"/></svg>
+          </div>
+          <p class="testimonial-quote">"We're a small independent café and the Hudjo team came to see us before we went live. The extra income is genuinely helpful, but honestly what I love most is meeting the cyclists. Half of them stop for a coffee while they wait. It just works."</p>
+          <div class="testimonial-author">
+            <span class="testimonial-author-name">Tom & Priya K.</span>
+            <span class="testimonial-author-role">Hosts & café owners, Bristol</span>
+          </div>
+        </article>
+
+        <article class="testimonial-card reveal reveal-delay-2" role="listitem">
+          <div class="testimonial-stars" aria-label="5 stars">
+            <svg class="testimonial-star" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.5 4.5H12l-3.75 2.7 1.44 4.3L6 9l-3.69 2.5 1.44-4.3L0 4.5h4.5z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.5 4.5H12l-3.75 2.7 1.44 4.3L6 9l-3.69 2.5 1.44-4.3L0 4.5h4.5z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.5 4.5H12l-3.75 2.7 1.44 4.3L6 9l-3.69 2.5 1.44-4.3L0 4.5h4.5z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.5 4.5H12l-3.75 2.7 1.44 4.3L6 9l-3.69 2.5 1.44-4.3L0 4.5h4.5z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.5 4.5H12l-3.75 2.7 1.44 4.3L6 9l-3.69 2.5 1.44-4.3L0 4.5h4.5z"/></svg>
+          </div>
+          <p class="testimonial-quote">"I ride an e-bike and I was always anxious leaving it anywhere. Hudjo removed that anxiety completely. Knowing there's a real person responsible for it — that's what makes the difference. I'd recommend it to every cyclist I know."</p>
+          <div class="testimonial-author">
+            <span class="testimonial-author-name">Marcus O.</span>
+            <span class="testimonial-author-role">E-bike rider, Manchester</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CTA BAND ──────────────────────────────────────────────────── -->
+  <div class="cta-band" aria-label="Get started with Hudjo">
+    <div class="container">
+      <span class="eyebrow reveal">Your first Hudjo is minutes away</span>
+      <h2 class="reveal reveal-delay-1">Secure the Ride.<br><em>Honour the Journey.</em></h2>
+      <p class="reveal reveal-delay-2">Download the app. Find a host near you. Check in. That's it.</p>
+      <div class="cta-band-btns reveal reveal-delay-3">
+        <a href="#" class="btn btn-vermillion">Download on the App Store</a>
+        <a href="#" class="btn btn-outline">Get it on Google Play</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── FOOTER ─────────────────────────────────────────────────────── -->
+  <footer id="footer" aria-label="Site footer">
+    <div class="container">
+      <div class="footer-top">
+
+        <div class="footer-brand">
+          <span class="footer-logo">HUDJ<span>O</span></span>
+          <p class="footer-tagline">Secure parking. Local income. Connected neighbourhoods. Inspired by Hojo — Japanese for security and prosperity.</p>
+          <div class="footer-social" aria-label="Social media links">
+            <!-- Instagram -->
+            <a href="#" class="social-link" aria-label="Instagram">
+              <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <!-- LinkedIn -->
+            <a href="#" class="social-link" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <!-- Twitter/X -->
+            <a href="#" class="social-link" aria-label="Twitter / X">
+              <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h5>Riders</h5>
+          <ul>
+            <li><a href="#how">How it works</a></li>
+            <li><a href="#why">Why Hudjo</a></li>
+            <li><a href="#">Download the app</a></li>
+            <li><a href="#">Find a host</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Hosts</h5>
+          <ul>
+            <li><a href="#hosts">Become a host</a></li>
+            <li><a href="#hosts">Earnings calculator</a></li>
+            <li><a href="#">Host resources</a></li>
+            <li><a href="#">Sign up</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Hudjo</h5>
+          <ul>
+            <li><a href="#mission">Mission</a></li>
+            <li><a href="#founder">About</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <span class="footer-bottom-left">&copy; 2026 Hudjo Ltd. All rights reserved.</span>
+        <span class="footer-global">Playing local. Going global.</span>
+      </div>
+      <div class="footer-bottom" style="border-top: 1px solid rgba(255,255,255,0.08); margin-top: 12px; padding-top: 14px; font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.5;">
+        Hosts reserve the right to refuse storage of any bicycle they consider to be in an unsafe condition, including modified or structurally compromised bicycles.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─── SCRIPTS ───────────────────────────────────────────────────── -->
+  <script>
+    // ── Nav scroll state ──
+    const nav = document.getElementById('nav');
+    const onScroll = () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ── Mobile hamburger ──
+    const hamburger = document.getElementById('hamburger');
+    const navMobile = document.getElementById('navMobile');
+    hamburger.addEventListener('click', () => {
+      const open = navMobile.classList.toggle('open');
+      hamburger.setAttribute('aria-expanded', open);
+    });
+    // Close on link click
+    navMobile.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navMobile.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // ── Reveal on scroll ──
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          revealObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => revealObserver.observe(el));
+
+    // ── Hero elements visible immediately ──
+    document.querySelectorAll('.hero .reveal').forEach(el => {
+      el.classList.add('is-visible');
+    });
+
+    // ── Earnings Calculator ──
+    const cRate   = document.getElementById('c-rate');
+    const cSpaces = document.getElementById('c-spaces');
+    const cHours  = document.getElementById('c-hours');
+
+    const cRateDisp   = document.getElementById('c-rate-display');
+    const cSpacesDisp = document.getElementById('c-spaces-display');
+    const cHoursDisp  = document.getElementById('c-hours-display');
+
+    const cPerSession = document.getElementById('c-per-session');
+    const cMonthly    = document.getElementById('c-monthly');
+    const cAnnual     = document.getElementById('c-annual');
+    const cCustomer   = document.getElementById('c-customer');
+
+    function fmtLarge(pence) {
+      const pounds = pence / 100;
+      if (pounds >= 1000) {
+        return '£' + pounds.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+      }
+      if (pounds >= 1) {
+        return '£' + pounds.toFixed(2).replace(/\.00$/, '');
+      }
+      return pence + 'p';
+    }
+
+    function updateTrack(slider, min, max) {
+      const pct = ((slider.value - min) / (max - min)) * 100;
+      slider.style.background =
+        `linear-gradient(to right, var(--charcoal) ${pct}%, var(--rule) ${pct}%)`;
+    }
+
+    function calcCalc() {
+      const ratePence = parseInt(cRate.value);
+      const spaces    = parseInt(cSpaces.value);
+      const hours     = parseInt(cHours.value);
+
+      cRateDisp.textContent   = ratePence + 'p / min';
+      cSpacesDisp.textContent = spaces === 1 ? '1 space' : spaces + ' spaces';
+      cHoursDisp.textContent  = hours === 1  ? '1 hr'    : hours + ' hrs';
+
+      const perSessionPence = ratePence * 60 * 0.8;
+      const monthlyPence    = ratePence * 60 * hours * spaces * 30 * 0.8;
+      const annualPence     = monthlyPence * 12;
+      const customerPence   = (ratePence * 60) + 50;
+
+      cPerSession.textContent = fmtLarge(perSessionPence);
+      cMonthly.textContent    = fmtLarge(monthlyPence);
+      cAnnual.textContent     = fmtLarge(annualPence);
+      cCustomer.textContent   = fmtLarge(customerPence);
+
+      updateTrack(cRate,   1, 5);
+      updateTrack(cSpaces, 1, 20);
+      updateTrack(cHours,  1, 8);
+    }
+
+    cRate.addEventListener('input', calcCalc);
+    cSpaces.addEventListener('input', calcCalc);
+    cHours.addEventListener('input', calcCalc);
+    calcCalc();
+
+    // ── Smooth scroll for anchor links ──
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', e => {
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          const top = target.getBoundingClientRect().top + window.scrollY - 72;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
